@@ -3,8 +3,8 @@
     // Enable strict mode
     "use strict";
 
-    // Use Sizzle standalone or from jQuery
-    var sizzle = window.Sizzle || jQuery.find;
+    // Use Sizzle standalone or from jQuery or querySelectorAll
+    var sizzle = window.Sizzle || window.jQuery && window.jQuery.find || document.querySelectorAll;
 
     // Set the number of sizzle selectors to cache (default is 50)
     //sizzle.selectors.cacheLength = 50;
@@ -108,7 +108,7 @@
                                 // Append second half of the selector
                                 tail = selectors[i].substring(result.index + result[1].length);
                                 if (tail.length > 0) {
-                                    
+
                                     t = tail.indexOf(" ");
                                     if (t != 0) {
                                         if (t > 0) {
@@ -144,7 +144,7 @@
     };
 
     var processStyleSheet = function (styleSheet, force) {
-        
+
         if (cssRules == null) {
             setCssRules();
         }
@@ -205,7 +205,7 @@
             var val = trim(value);
             if (val != "") {
                 var cur = clean(element, attr);
-                
+
                 if (cur.indexOf(" " + val + " ") < 0) {
                     // Add the value if its not already there
                     element.setAttribute(attr, trim(cur + val));
@@ -253,8 +253,8 @@
         // For each selector
         for (i in queryData) {
 
-            // Get the items matching the selector
-            elements = sizzle(i);
+            // elements = sizzle(i);
+            elements = sizzle.call(document, i);
 
             if (elements.length > 0) {
 
@@ -276,7 +276,7 @@
                             }
 
                             /* NOTE: Using offsetWidth/Height so an element can be adjusted when it reaches a specific size.
-                            /* For Nested queries scrollWidth/Height or clientWidth/Height may sometime be desired but are not supported. */
+                             /* For Nested queries scrollWidth/Height or clientWidth/Height may sometime be desired but are not supported. */
 
                             if ((j == "min-width" && element.offsetWidth >= val) ||
                                 (j == "max-width" && element.offsetWidth <= val) ||
